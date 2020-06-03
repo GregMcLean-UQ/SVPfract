@@ -32,6 +32,10 @@
             this.MetFileLinkLabel = new System.Windows.Forms.LinkLabel();
             this.MetFileNameLabel = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.CalcLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.minRadnTextBox = new System.Windows.Forms.TextBox();
+            this.spvFractLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -69,11 +73,52 @@
             this.openFileDialog.FileName = "\"C:\\Pioneer\\SPVfract\\WoodlandHourly2019.csv\"";
             this.openFileDialog.Filter = "Met File (*.csv)|*.csv";
             // 
+            // CalcLinkLabel
+            // 
+            this.CalcLinkLabel.AutoSize = true;
+            this.CalcLinkLabel.Location = new System.Drawing.Point(26, 121);
+            this.CalcLinkLabel.Name = "CalcLinkLabel";
+            this.CalcLinkLabel.Size = new System.Drawing.Size(118, 16);
+            this.CalcLinkLabel.TabIndex = 3;
+            this.CalcLinkLabel.TabStop = true;
+            this.CalcLinkLabel.Text = "Calculate SVPfract";
+            this.CalcLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CalcLinkLabel_LinkClicked);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(26, 86);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(119, 16);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Minimum Radiation";
+            // 
+            // minRadnTextBox
+            // 
+            this.minRadnTextBox.Location = new System.Drawing.Point(195, 86);
+            this.minRadnTextBox.Name = "minRadnTextBox";
+            this.minRadnTextBox.Size = new System.Drawing.Size(63, 22);
+            this.minRadnTextBox.TabIndex = 5;
+            this.minRadnTextBox.Text = "300";
+            // 
+            // spvFractLabel
+            // 
+            this.spvFractLabel.AutoSize = true;
+            this.spvFractLabel.Location = new System.Drawing.Point(192, 121);
+            this.spvFractLabel.Name = "spvFractLabel";
+            this.spvFractLabel.Size = new System.Drawing.Size(60, 16);
+            this.spvFractLabel.TabIndex = 6;
+            this.spvFractLabel.Text = "SPVfract";
+            // 
             // SPVfractForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1326, 789);
+            this.Controls.Add(this.spvFractLabel);
+            this.Controls.Add(this.minRadnTextBox);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.CalcLinkLabel);
             this.Controls.Add(this.MetFileNameLabel);
             this.Controls.Add(this.MetFileLinkLabel);
             this.Controls.Add(this.label1);
@@ -92,6 +137,10 @@
         private System.Windows.Forms.LinkLabel MetFileLinkLabel;
         private System.Windows.Forms.Label MetFileNameLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.LinkLabel CalcLinkLabel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox minRadnTextBox;
+        private System.Windows.Forms.Label spvFractLabel;
     }
 }
 
