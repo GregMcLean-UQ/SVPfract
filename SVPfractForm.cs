@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Utilities;
+
 
 namespace SVPfract
 {
@@ -111,13 +111,15 @@ namespace SVPfract
             }
 
             // graph data 
-            DrawGraph();
+            DrawGraph(minSvpFract.ToString("F3"));
 
 
         }
-        public void DrawGraph()
+        public void DrawGraph(string svpFract)
         {
             // Graph the predicted vs obs VPD
+            chart.Titles[0].Text = Path.GetFileNameWithoutExtension(MetFileNameLabel.Text + "From " + fromMonth.Text + " To " + toMonth.Text);
+            chart.Titles[1].Text = "SVP Fraction = " + svpFract;
             chart.Series[0].Points.Clear();
             foreach (DailyRecord rec in dailyData)
             {

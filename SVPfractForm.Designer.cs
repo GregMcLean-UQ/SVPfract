@@ -36,6 +36,8 @@
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint1 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(4D, 4D);
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.label1 = new System.Windows.Forms.Label();
             this.MetFileLinkLabel = new System.Windows.Forms.LinkLabel();
             this.MetFileNameLabel = new System.Windows.Forms.Label();
@@ -90,7 +92,7 @@
             // CalcLinkLabel
             // 
             this.CalcLinkLabel.AutoSize = true;
-            this.CalcLinkLabel.Location = new System.Drawing.Point(26, 121);
+            this.CalcLinkLabel.Location = new System.Drawing.Point(26, 194);
             this.CalcLinkLabel.Name = "CalcLinkLabel";
             this.CalcLinkLabel.Size = new System.Drawing.Size(118, 16);
             this.CalcLinkLabel.TabIndex = 3;
@@ -118,7 +120,7 @@
             // spvFractLabel
             // 
             this.spvFractLabel.AutoSize = true;
-            this.spvFractLabel.Location = new System.Drawing.Point(192, 121);
+            this.spvFractLabel.Location = new System.Drawing.Point(192, 194);
             this.spvFractLabel.Name = "spvFractLabel";
             this.spvFractLabel.Size = new System.Drawing.Size(60, 16);
             this.spvFractLabel.TabIndex = 6;
@@ -129,7 +131,7 @@
             textAnnotation1.AnchorX = 50D;
             textAnnotation1.AnchorY = 20D;
             textAnnotation1.Name = "Regression";
-            textAnnotation1.Text = "Regression";
+            textAnnotation1.Text = ".";
             this.chart.Annotations.Add(textAnnotation1);
             chartArea1.AxisX.Maximum = 4D;
             chartArea1.AxisX.Minimum = 0D;
@@ -140,7 +142,7 @@
             legend1.Enabled = false;
             legend1.Name = "Legend1";
             this.chart.Legends.Add(legend1);
-            this.chart.Location = new System.Drawing.Point(295, 86);
+            this.chart.Location = new System.Drawing.Point(296, 86);
             this.chart.Name = "chart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
@@ -164,14 +166,19 @@
             this.chart.Series.Add(series1);
             this.chart.Series.Add(series2);
             this.chart.Series.Add(series3);
-            this.chart.Size = new System.Drawing.Size(549, 482);
+            this.chart.Size = new System.Drawing.Size(553, 503);
             this.chart.TabIndex = 7;
             this.chart.Text = "chart1";
+            title1.Name = "Title1";
+            title1.Text = "Title";
+            title2.Name = "Title2";
+            this.chart.Titles.Add(title1);
+            this.chart.Titles.Add(title2);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(26, 172);
+            this.label3.Location = new System.Drawing.Point(26, 122);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 16);
             this.label3.TabIndex = 8;
@@ -180,7 +187,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 199);
+            this.label4.Location = new System.Drawing.Point(26, 149);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 16);
             this.label4.TabIndex = 9;
@@ -189,7 +196,7 @@
             // fromMonth
             // 
             this.fromMonth.FormattingEnabled = true;
-            this.fromMonth.Location = new System.Drawing.Point(131, 169);
+            this.fromMonth.Location = new System.Drawing.Point(137, 119);
             this.fromMonth.Name = "fromMonth";
             this.fromMonth.Size = new System.Drawing.Size(121, 24);
             this.fromMonth.TabIndex = 10;
@@ -197,7 +204,7 @@
             // toMonth
             // 
             this.toMonth.FormattingEnabled = true;
-            this.toMonth.Location = new System.Drawing.Point(132, 196);
+            this.toMonth.Location = new System.Drawing.Point(137, 146);
             this.toMonth.Name = "toMonth";
             this.toMonth.Size = new System.Drawing.Size(121, 24);
             this.toMonth.TabIndex = 11;
