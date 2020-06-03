@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using Utilities;
 
 namespace SVPfract
 {
@@ -20,6 +23,17 @@ namespace SVPfract
         {
             InitializeComponent();
         }
+        private void SPVfractForm_Load(object sender, EventArgs e)
+        {
+            for (int i = 1; i <= 12; i++)
+            {
+                fromMonth.Items.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i));
+                toMonth.Items.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i));
+            }
+            fromMonth.SelectedIndex = 0;
+            toMonth.SelectedIndex = 11;
+        }
+
 
         private void MetFileLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -79,11 +93,11 @@ namespace SVPfract
             {
                 // calculate ssd
                 double sumSSD = 0;
-                foreach(DailyRecord rec in dailyData)
+                foreach (DailyRecord rec in dailyData)
                 {
-                    sumSSD += Math.Pow( ((rec.svpMaxT- rec. svpMinT) * svpFract - rec.avgVPD),2.0);
+                    sumSSD += Math.Pow(((rec.svpMaxT - rec.svpMinT) * svpFract - rec.avgVPD), 2.0);
                 }
-                if(sumSSD < minSSD)
+                if (sumSSD < minSSD)
                 {
                     minSSD = sumSSD;
                     minSvpFract = svpFract;
@@ -97,9 +111,33 @@ namespace SVPfract
             }
 
             // graph data 
+            DrawGraph();
 
 
+        }
+        public void DrawGraph()
+        {
+            // Graph the predicted vs obs VPD
+            chart.Series[0].Points.Clear();
+            foreach (DailyRecord rec in dailyData)
+            {
+                chart.Series[0].Points.AddXY(rec.avgVPD, rec.predVPD);
+            }
 
+            var obsVPD = from x in dailyData select x.avgVPD;
+            var predVPD = from x in dailyData select x.predVPD;
+            Stats s = new Stats();
+
+            double slope, intercept, rsq;
+            s.calcRegression(obsVPD.ToArray(), predVPD.ToArray(), out slope, out intercept, out rsq);
+            chart.Series[1].Points.Clear();
+            chart.Series[1].Points.AddXY(0, 0);
+            double maxVal = obsVPD.Max();
+            chart.Series[1].Points.AddXY(maxVal, maxVal * slope + intercept);
+            TextAnnotation ta = new TextAnnotation();
+            ta.Text = "";
+            ((TextAnnotation)(chart.Annotations[0])).Text = "y = " + slope.ToString("F2") + "x + " + 
+                intercept.ToString("F2") + "\n rsq = " + rsq.ToString("F2");
         }
 
     }
