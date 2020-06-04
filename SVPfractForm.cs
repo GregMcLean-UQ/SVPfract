@@ -69,11 +69,26 @@ namespace SVPfract
             DateTime firstDay = hourlyData.hourlyRecords.First().dateTime.Date;
             DateTime lastDay = hourlyData.hourlyRecords.Last().dateTime.Date;
 
+            // Get the months requested to filter the data
+            List<int> includedMonths = new List<int>();
+            if (fromMonth.SelectedIndex < toMonth.SelectedIndex)
+            {
+                for (int i = fromMonth.SelectedIndex + 1; i <= toMonth.SelectedIndex + 1; i++)
+                    includedMonths.Add(i);
+            }
+            else
+            {
+                for (int i = fromMonth.SelectedIndex + 1; i <= 12; i++)
+                    includedMonths.Add(i);
+                for (int i = 1; i <= toMonth.SelectedIndex + 1; i++)
+                    includedMonths.Add(i);
+            }
+
             for (DateTime dt = firstDay; dt <= lastDay; dt = dt.AddDays(1))
             {
                 try
                 {
-                    var dayData = from x in hourlyData.hourlyRecords where x.dateTime.Date == dt select x;
+                    var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Date == dt && includedMonths.Contains( x.dateTime.Month))  select x;
                     var avgVPD = (from y in dayData where y.radiation > radnThreshold select y.vpd).Average();
                     var svpMaxT = dayData.OrderBy(p => p.temperature).Last().svp;
                     var svpMinT = dayData.OrderBy(p => p.temperature).First().svp;
@@ -118,7 +133,8 @@ namespace SVPfract
         public void DrawGraph(string svpFract)
         {
             // Graph the predicted vs obs VPD
-            chart.Titles[0].Text = Path.GetFileNameWithoutExtension(MetFileNameLabel.Text + "From " + fromMonth.Text + " To " + toMonth.Text);
+            string title = Path.GetFileNameWithoutExtension(MetFileNameLabel.Text) + " From " + fromMonth.Text + " To " + toMonth.Text;
+            chart.Titles[0].Text = title; ;
             chart.Titles[1].Text = "SVP Fraction = " + svpFract;
             chart.Series[0].Points.Clear();
             foreach (DailyRecord rec in dailyData)
@@ -138,8 +154,8 @@ namespace SVPfract
             chart.Series[1].Points.AddXY(maxVal, maxVal * slope + intercept);
             TextAnnotation ta = new TextAnnotation();
             ta.Text = "";
-            ((TextAnnotation)(chart.Annotations[0])).Text = "y = " + slope.ToString("F2") + "x + " + 
-                intercept.ToString("F2") + "\n rsq = " + rsq.ToString("F2");
+            ((TextAnnotation)(chart.Annotations[0])).Text = "y = " + slope.ToString("F2") + "x + " +
+                intercept.ToString("F2") + "\n rsq = " + rsq.ToString("F2") + " n = " + obsVPD.Count();
         }
 
     }

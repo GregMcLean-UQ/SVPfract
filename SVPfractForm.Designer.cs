@@ -128,15 +128,20 @@
             // 
             // chart
             // 
-            textAnnotation1.AnchorX = 50D;
-            textAnnotation1.AnchorY = 20D;
+            textAnnotation1.AnchorDataPointName = "One2One\\r1";
+            textAnnotation1.AnchorOffsetX = 50D;
+            textAnnotation1.AnchorOffsetY = 60D;
+            textAnnotation1.AnchorX = 0D;
+            textAnnotation1.AnchorY = 0D;
             textAnnotation1.Name = "Regression";
             textAnnotation1.Text = ".";
             this.chart.Annotations.Add(textAnnotation1);
             chartArea1.AxisX.Maximum = 4D;
             chartArea1.AxisX.Minimum = 0D;
+            chartArea1.AxisX.Title = "Mean Daytime VPD (kPa)";
             chartArea1.AxisY.Maximum = 4D;
             chartArea1.AxisY.Minimum = 0D;
+            chartArea1.AxisY.Title = "Predicted VPD  (kPa)";
             chartArea1.Name = "ChartArea1";
             this.chart.ChartAreas.Add(chartArea1);
             legend1.Enabled = false;
@@ -166,11 +171,12 @@
             this.chart.Series.Add(series1);
             this.chart.Series.Add(series2);
             this.chart.Series.Add(series3);
-            this.chart.Size = new System.Drawing.Size(553, 503);
+            this.chart.Size = new System.Drawing.Size(514, 532);
             this.chart.TabIndex = 7;
             this.chart.Text = "chart1";
+            title1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             title1.Name = "Title1";
-            title1.Text = "Title";
+            title1.Text = "VPD";
             title2.Name = "Title2";
             this.chart.Titles.Add(title1);
             this.chart.Titles.Add(title2);
