@@ -78,6 +78,7 @@ namespace SVPfract
                 {
                     var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Date == dt && includedMonths.Contains(x.dateTime.Month)) select x;
                     var avgVPD = (from y in dayData where y.radiation > radnThreshold select y.vpd).Average();
+                    var minT = (from y in dayData select y.temperature).Min();
                     var svpMaxT = dayData.OrderBy(p => p.temperature).Last().svp;
                     var svpMinT = dayData.OrderBy(p => p.temperature).First().svp;
 
@@ -242,56 +243,48 @@ namespace SVPfract
             var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
 
             temperatureChart.Series.Clear();
+            List<double> dailyMax = new List<double>();
+            List<double> dailyMin = new List<double>();
 
             for (int doy = dayData.First().doy; doy <= dayData.Last().doy; doy++)
             {
                 var hourData = from x in hourlyData.hourlyRecords where (x.doy == doy) select x;
 
                 // For each day draw a line of temperature vs hour of day
-                String seriesName = "Year"+ hourData.First().dateTime.Year.ToString() + "Day" + doy.ToString();
+                String seriesName = "Year" + hourData.First().dateTime.Year.ToString() + "Day" + doy.ToString();
                 Series newDay = temperatureChart.Series.Add(seriesName);
                 newDay.ChartType = SeriesChartType.Line;
                 newDay.Color = Color.Wheat;
                 newDay.ToolTip = seriesName;
-                foreach(HourlyRecord hd in hourData)
+                foreach (HourlyRecord hd in hourData)
                 {
-                    newDay.Points.AddXY(hd.dateTime.Hour,hd.temperature);
+                    newDay.Points.AddXY(hd.dateTime.Hour - 1, hd.temperature);
                 }
-
-
-
-                // Add estimated temperatures for a day in the middle of the month
-                double latitude = Convert.ToDouble(latTextBox.Text);
-                double midMonth = dayData.First().doy + 15;
-                var obshourlyData = from x in hourlyData.hourlyRecords where (x.doy == midMonth) select x;
-                double tMax = (from x in obshourlyData select x.temperature).Max();
-                double tMin = (from x in obshourlyData select x.temperature).Min();
-                double minLag = Convert.ToDouble(minLagTextBox.Text);
-                double maxLag = Convert.ToDouble(maxLagTextBox.Text);
-                double nightCoef = Convert.ToDouble(nightCoefTextBox.Text);
-                var estHourly = calcTemperature(latitude, midMonth, tMax, tMin, minLag, maxLag, nightCoef);
-
-
-                // temperatureChart.Series.Add(newDay);
-
+                dailyMax.Add((from x in hourData select x.temperature).Max());
+                dailyMin.Add((from x in hourData select x.temperature).Min());
             }
 
-            //for (DateTime dt = firstDay; dt <= lastDay; dt = dt.AddDays(1))
-            //{
-            //    try
-            //    {
-            //        var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Date == dt && includedMonths.Contains(x.dateTime.Month)) select x;
-            //        var avgVPD = (from y in dayData where y.radiation > radnThreshold select y.vpd).Average();
-            //        var svpMaxT = dayData.OrderBy(p => p.temperature).Last().svp;
-            //        var svpMinT = dayData.OrderBy(p => p.temperature).First().svp;
 
-            //        dailyData.Add(new DailyRecord(dt, avgVPD, svpMaxT, svpMinT));
-            //    }
-            //    catch (Exception ex)
-            //    {
+            // Add estimated temperatures for a day in the middle of the month with average monthly tMax and tMin
+            double latitude = Convert.ToDouble(latTextBox.Text);
+            double midMonth = dayData.First().doy + 15;
 
-            //    }
+            double tMax = dailyMax.Average();
+            double tMin = dailyMin.Average();
+            double minLag = Convert.ToDouble(minLagTextBox.Text);
+            double maxLag = Convert.ToDouble(maxLagTextBox.Text);
+            double nightCoef = Convert.ToDouble(nightCoefTextBox.Text);
 
+            var estHourly = calcTemperature(latitude, midMonth, tMax, tMin, minLag, maxLag, nightCoef);
+
+            Series pred = temperatureChart.Series.Add("Predicted");
+            pred.ChartType = SeriesChartType.Line;
+            pred.Color = Color.Black;
+            pred.ToolTip = "Predicted";
+            for (int i = 0; i < estHourly.Count; i++)
+            {
+                pred.Points.AddXY(i, estHourly[i]);
+            }
 
         }
 
