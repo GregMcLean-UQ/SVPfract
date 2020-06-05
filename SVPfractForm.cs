@@ -34,7 +34,6 @@ namespace SVPfract
             toMonth.SelectedIndex = 11;
         }
 
-
         private void MetFileLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Get the met file data
@@ -88,7 +87,7 @@ namespace SVPfract
             {
                 try
                 {
-                    var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Date == dt && includedMonths.Contains( x.dateTime.Month))  select x;
+                    var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Date == dt && includedMonths.Contains(x.dateTime.Month)) select x;
                     var avgVPD = (from y in dayData where y.radiation > radnThreshold select y.vpd).Average();
                     var svpMaxT = dayData.OrderBy(p => p.temperature).Last().svp;
                     var svpMinT = dayData.OrderBy(p => p.temperature).First().svp;
@@ -146,8 +145,8 @@ namespace SVPfract
             var predVPD = from x in dailyData select x.predVPD;
             Stats s = new Stats();
 
-            double slope, intercept, rsq;
-            s.calcRegression(obsVPD.ToArray(), predVPD.ToArray(), out slope, out intercept, out rsq);
+            double slope, intercept, rsq, rmse;
+            s.calcRegression(obsVPD.ToArray(), predVPD.ToArray(), out slope, out intercept, out rsq, out rmse);
             chart.Series[1].Points.Clear();
             chart.Series[1].Points.AddXY(0, 0);
             double maxVal = obsVPD.Max();
@@ -155,8 +154,181 @@ namespace SVPfract
             TextAnnotation ta = new TextAnnotation();
             ta.Text = "";
             ((TextAnnotation)(chart.Annotations[0])).Text = "y = " + slope.ToString("F2") + "x + " +
-                intercept.ToString("F2") + "\n rsq = " + rsq.ToString("F2") + " n = " + obsVPD.Count();
+                intercept.ToString("F2") + "\n rsq = " + rsq.ToString("F2") + " rmse = " + rmse.ToString("F2") + " n = " + obsVPD.Count();
         }
+        #region
+        private void copyItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            ContextMenuStrip menuStrip = (ContextMenuStrip)menuItem.GetCurrentParent();
+            Chart cht = (Chart)(menuStrip.SourceControl);
+
+
+            // create a memory stream to save the chart image    
+            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            // save the chart image to the stream    
+            cht.SaveImage(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            // create a bitmap using the stream    
+            Bitmap bmp = new Bitmap(stream);
+
+            // save the bitmap to the clipboard    
+            Clipboard.SetDataObject(bmp);
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            ContextMenuStrip menuStrip = (ContextMenuStrip)menuItem.GetCurrentParent();
+            Chart cht = (Chart)(menuStrip.SourceControl);
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            // Sets the current file name filter string, which determines 
+            // the choices that appear in the "Save as file type" or 
+            // "Files of type" box in the dialog box.
+            saveFileDialog1.Filter = "Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|EMF (*.emf)|*.emf|PNG (*.png)|*.png|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            // Set image file format
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                ChartImageFormat format = ChartImageFormat.Bmp;
+
+                if (saveFileDialog1.FileName.EndsWith("bmp")) format = ChartImageFormat.Bmp;
+                else if (saveFileDialog1.FileName.EndsWith("jpg")) format = ChartImageFormat.Jpeg;
+                else if (saveFileDialog1.FileName.EndsWith("emf")) format = ChartImageFormat.Emf;
+                else if (saveFileDialog1.FileName.EndsWith("gif")) format = ChartImageFormat.Gif;
+                else if (saveFileDialog1.FileName.EndsWith("png")) format = ChartImageFormat.Png;
+                else if (saveFileDialog1.FileName.EndsWith("tif")) format = ChartImageFormat.Tiff;
+
+                // Save image
+                cht.SaveImage(saveFileDialog1.FileName, format);
+
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            ContextMenuStrip menuStrip = (ContextMenuStrip)menuItem.GetCurrentParent();
+            Chart cht = (Chart)(menuStrip.SourceControl);
+            cht.Printing.PrintPreview();
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            ContextMenuStrip menuStrip = (ContextMenuStrip)menuItem.GetCurrentParent();
+            Chart cht = (Chart)(menuStrip.SourceControl);
+            cht.Printing.Print(true);
+
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------
+        private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveDataFile.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            string csvFileName = saveDataFile.FileName;
+
+            //ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            //ContextMenuStrip menuStrip = (ContextMenuStrip)menuItem.GetCurrentParent();
+            //Chart cht = (Chart)(menuStrip.SourceControl);
+            //string chartName = cht.Name;
+
+            List<string> lines = new List<string>();
+            foreach (DataPoint pt in chart.Series["Data"].Points)
+            {
+                string line = pt.XValue.ToString("F4") + "," + pt.YValues[0].ToString("F4");
+                lines.Add(line);
+            }
+            File.WriteAllLines(csvFileName, lines);
+
+            //List<string> lines = new List<string>();
+            //if (chartName == "boxPlot")
+            //{
+            //    // header
+            //    List<string> header = new List<string>();
+            //    foreach (DataGridViewColumn col in dataGrid.Columns)
+            //        header.Add(col.HeaderText);
+            //    lines.Add(String.Join(",", header.ToArray()));
+
+            //    foreach (DataGridViewRow row in dataGrid.Rows)
+            //    {
+            //        if (!(bool)row.Cells["Selected"].Value) continue;
+            //        // header
+            //        List<string> levels = new List<string>();
+            //        for (int i = 0; i < dataGrid.ColumnCount; i++)
+            //            levels.Add(row.Cells[i].Value.ToString());
+
+            //        lines.Add(String.Join(",", levels.ToArray()));
+            //    }
+
+            //}
+            //else if (chartName == "optChart")
+            //{
+
+            //    lines.Add("Risk,Yield,Site,RowConfiguration,Population,Planting,RootAngle");
+
+            //    foreach (DataPoint pt in optChart.Series["GxM"].Points)
+            //    {
+            //        string line = pt.XValue.ToString("F0") + " " + pt.YValues[0].ToString("F0") + " " + pt.ToolTip;
+            //        line = line.Replace(' ', ',');
+            //        lines.Add(line);
+            //    }
+
+
+            //}
+
+            //else if (chartName == "diffChart")
+            //{
+            //    int chartIndx = Convert.ToInt32(groupBox.Tag);
+            //    switch (chartIndx)
+            //    {
+            //        case 0:
+            //            lines.Add("Yield,Difference");
+            //            break;
+            //        case 1:
+            //            lines.Add("Yield,Difference%");
+            //            break;
+            //        case 2:
+            //            lines.Add("Year,Difference");
+            //            break;
+            //    }
+            //    if (chartIndx == 2)      // time series
+            //    {
+            //        foreach (DataPoint pt in diffChart.Series["Time"].Points)
+            //        {
+            //            string line = pt.XValue.ToString("F0") + "," + pt.YValues[0].ToString("F0");
+            //            lines.Add(line);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (DataPoint pt in diffChart.Series["GxM"].Points)
+            //        {
+            //            string line = pt.XValue.ToString("F1") + "," + pt.YValues[0].ToString("F1");
+            //            lines.Add(line);
+            //        }
+            //    }
+            //}
+
+
+
+            //File.WriteAllLines(csvFileName, lines);
+
+            /*
+             * int ptIndx = optChart.Series["GxM"].Points.AddXY((double)p.X, (double)p.Y);
+               optChart.Series["GxM"].Points[ptIndx].ToolTip = string.Join(" ", levels);
+               optChart.Series["GxM"].Points[ptIndx].Color = colorList[colourIndx];
+             * */
+        }
+
+        #endregion
 
     }
 }
