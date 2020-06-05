@@ -59,6 +59,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <EmbeddedResource Include="SVPfractForm.resx">
       <DependentUpon>SVPfractForm.cs</DependentUpon>
     </EmbeddedResource>

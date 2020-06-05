@@ -39,6 +39,9 @@
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint2 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(4D, 4D);
             System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SPVfractForm));
             this.label1 = new System.Windows.Forms.Label();
             this.MetFileLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -64,11 +67,23 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.SVPPage = new System.Windows.Forms.TabPage();
             this.TemprPage = new System.Windows.Forms.TabPage();
+            this.ReChartLabel = new System.Windows.Forms.LinkLabel();
+            this.minLagTextBox = new System.Windows.Forms.TextBox();
+            this.nightCoefTextBox = new System.Windows.Forms.TextBox();
+            this.maxLagTextBox = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.latTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.temperatureChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.graphMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.SVPPage.SuspendLayout();
+            this.TemprPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.temperatureChart)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -95,7 +110,7 @@
             // MetFileNameLabel
             // 
             this.MetFileNameLabel.AutoSize = true;
-            this.MetFileNameLabel.Location = new System.Drawing.Point(205, 65);
+            this.MetFileNameLabel.Location = new System.Drawing.Point(39, 92);
             this.MetFileNameLabel.Name = "MetFileNameLabel";
             this.MetFileNameLabel.Size = new System.Drawing.Size(61, 16);
             this.MetFileNameLabel.TabIndex = 2;
@@ -109,7 +124,7 @@
             // CalcLinkLabel
             // 
             this.CalcLinkLabel.AutoSize = true;
-            this.CalcLinkLabel.Location = new System.Drawing.Point(26, 121);
+            this.CalcLinkLabel.Location = new System.Drawing.Point(26, 56);
             this.CalcLinkLabel.Name = "CalcLinkLabel";
             this.CalcLinkLabel.Size = new System.Drawing.Size(118, 16);
             this.CalcLinkLabel.TabIndex = 3;
@@ -137,7 +152,7 @@
             // spvFractLabel
             // 
             this.spvFractLabel.AutoSize = true;
-            this.spvFractLabel.Location = new System.Drawing.Point(192, 121);
+            this.spvFractLabel.Location = new System.Drawing.Point(192, 56);
             this.spvFractLabel.Name = "spvFractLabel";
             this.spvFractLabel.Size = new System.Drawing.Size(60, 16);
             this.spvFractLabel.TabIndex = 6;
@@ -165,7 +180,7 @@
             legend1.Enabled = false;
             legend1.Name = "Legend1";
             this.chart.Legends.Add(legend1);
-            this.chart.Location = new System.Drawing.Point(301, 90);
+            this.chart.Location = new System.Drawing.Point(302, 22);
             this.chart.Name = "chart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
@@ -189,7 +204,7 @@
             this.chart.Series.Add(series1);
             this.chart.Series.Add(series2);
             this.chart.Series.Add(series3);
-            this.chart.Size = new System.Drawing.Size(514, 532);
+            this.chart.Size = new System.Drawing.Size(630, 613);
             this.chart.TabIndex = 7;
             this.chart.Text = "chart1";
             title1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -248,7 +263,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(26, 49);
+            this.label3.Location = new System.Drawing.Point(416, 65);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 16);
             this.label3.TabIndex = 8;
@@ -257,7 +272,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 76);
+            this.label4.Location = new System.Drawing.Point(416, 92);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 16);
             this.label4.TabIndex = 9;
@@ -266,18 +281,20 @@
             // fromMonth
             // 
             this.fromMonth.FormattingEnabled = true;
-            this.fromMonth.Location = new System.Drawing.Point(137, 46);
+            this.fromMonth.Location = new System.Drawing.Point(527, 62);
             this.fromMonth.Name = "fromMonth";
             this.fromMonth.Size = new System.Drawing.Size(121, 24);
             this.fromMonth.TabIndex = 10;
+            this.fromMonth.SelectedIndexChanged += new System.EventHandler(this.IncludedMonth_SelectedIndexChanged);
             // 
             // toMonth
             // 
             this.toMonth.FormattingEnabled = true;
-            this.toMonth.Location = new System.Drawing.Point(137, 73);
+            this.toMonth.Location = new System.Drawing.Point(527, 89);
             this.toMonth.Name = "toMonth";
             this.toMonth.Size = new System.Drawing.Size(121, 24);
             this.toMonth.TabIndex = 11;
+            this.toMonth.SelectedIndexChanged += new System.EventHandler(this.IncludedMonth_SelectedIndexChanged);
             // 
             // saveDataFile
             // 
@@ -289,10 +306,14 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.MetFileLinkLabel);
             this.panel1.Controls.Add(this.MetFileNameLabel);
+            this.panel1.Controls.Add(this.fromMonth);
+            this.panel1.Controls.Add(this.toMonth);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1326, 106);
+            this.panel1.Size = new System.Drawing.Size(1326, 125);
             this.panel1.TabIndex = 12;
             // 
             // tabControl
@@ -300,10 +321,10 @@
             this.tabControl.Controls.Add(this.SVPPage);
             this.tabControl.Controls.Add(this.TemprPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 106);
+            this.tabControl.Location = new System.Drawing.Point(0, 125);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1326, 683);
+            this.tabControl.Size = new System.Drawing.Size(1326, 664);
             this.tabControl.TabIndex = 13;
             // 
             // SVPPage
@@ -312,28 +333,138 @@
             this.SVPPage.Controls.Add(this.CalcLinkLabel);
             this.SVPPage.Controls.Add(this.minRadnTextBox);
             this.SVPPage.Controls.Add(this.chart);
-            this.SVPPage.Controls.Add(this.toMonth);
             this.SVPPage.Controls.Add(this.spvFractLabel);
-            this.SVPPage.Controls.Add(this.fromMonth);
-            this.SVPPage.Controls.Add(this.label3);
-            this.SVPPage.Controls.Add(this.label4);
             this.SVPPage.Location = new System.Drawing.Point(4, 25);
             this.SVPPage.Name = "SVPPage";
             this.SVPPage.Padding = new System.Windows.Forms.Padding(3);
-            this.SVPPage.Size = new System.Drawing.Size(1318, 654);
+            this.SVPPage.Size = new System.Drawing.Size(1318, 635);
             this.SVPPage.TabIndex = 0;
             this.SVPPage.Text = "SVP Fract";
             this.SVPPage.UseVisualStyleBackColor = true;
             // 
             // TemprPage
             // 
+            this.TemprPage.Controls.Add(this.temperatureChart);
+            this.TemprPage.Controls.Add(this.ReChartLabel);
+            this.TemprPage.Controls.Add(this.minLagTextBox);
+            this.TemprPage.Controls.Add(this.nightCoefTextBox);
+            this.TemprPage.Controls.Add(this.maxLagTextBox);
+            this.TemprPage.Controls.Add(this.textBox3);
+            this.TemprPage.Controls.Add(this.textBox2);
+            this.TemprPage.Controls.Add(this.textBox1);
+            this.TemprPage.Controls.Add(this.latTextBox);
+            this.TemprPage.Controls.Add(this.label6);
             this.TemprPage.Location = new System.Drawing.Point(4, 25);
             this.TemprPage.Name = "TemprPage";
             this.TemprPage.Padding = new System.Windows.Forms.Padding(3);
-            this.TemprPage.Size = new System.Drawing.Size(1318, 654);
+            this.TemprPage.Size = new System.Drawing.Size(1318, 635);
             this.TemprPage.TabIndex = 1;
             this.TemprPage.Text = "Diurnal Temperature";
             this.TemprPage.UseVisualStyleBackColor = true;
+            // 
+            // ReChartLabel
+            // 
+            this.ReChartLabel.AutoSize = true;
+            this.ReChartLabel.Location = new System.Drawing.Point(21, 129);
+            this.ReChartLabel.Name = "ReChartLabel";
+            this.ReChartLabel.Size = new System.Drawing.Size(51, 16);
+            this.ReChartLabel.TabIndex = 38;
+            this.ReChartLabel.TabStop = true;
+            this.ReChartLabel.Text = "Redraw";
+            this.ReChartLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ReChartLabel_LinkClicked);
+            // 
+            // minLagTextBox
+            // 
+            this.minLagTextBox.Location = new System.Drawing.Point(177, 389);
+            this.minLagTextBox.Name = "minLagTextBox";
+            this.minLagTextBox.Size = new System.Drawing.Size(62, 22);
+            this.minLagTextBox.TabIndex = 34;
+            this.minLagTextBox.Text = "1.0";
+            // 
+            // nightCoefTextBox
+            // 
+            this.nightCoefTextBox.Location = new System.Drawing.Point(177, 339);
+            this.nightCoefTextBox.Name = "nightCoefTextBox";
+            this.nightCoefTextBox.Size = new System.Drawing.Size(62, 22);
+            this.nightCoefTextBox.TabIndex = 33;
+            this.nightCoefTextBox.Text = "4.0";
+            // 
+            // maxLagTextBox
+            // 
+            this.maxLagTextBox.Location = new System.Drawing.Point(178, 293);
+            this.maxLagTextBox.Name = "maxLagTextBox";
+            this.maxLagTextBox.Size = new System.Drawing.Size(62, 22);
+            this.maxLagTextBox.TabIndex = 32;
+            this.maxLagTextBox.Text = "1.5";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(23, 369);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(148, 42);
+            this.textBox3.TabIndex = 31;
+            this.textBox3.TabStop = false;
+            this.textBox3.Text = "Min temperature after sunrise lag (hr)";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(23, 321);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(148, 40);
+            this.textBox2.TabIndex = 30;
+            this.textBox2.TabStop = false;
+            this.textBox2.Text = "Coef for night time temperature decrease";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(24, 276);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(148, 39);
+            this.textBox1.TabIndex = 29;
+            this.textBox1.TabStop = false;
+            this.textBox1.Text = "Max temperature after noon lag (hr)";
+            // 
+            // latTextBox
+            // 
+            this.latTextBox.Location = new System.Drawing.Point(163, 34);
+            this.latTextBox.Name = "latTextBox";
+            this.latTextBox.Size = new System.Drawing.Size(76, 22);
+            this.latTextBox.TabIndex = 24;
+            this.latTextBox.Text = "38.6785";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 33);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(71, 16);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "Latitude (°)";
+            // 
+            // temperatureChart
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.temperatureChart.ChartAreas.Add(chartArea2);
+            legend2.Enabled = false;
+            legend2.Name = "Legend1";
+            this.temperatureChart.Legends.Add(legend2);
+            this.temperatureChart.Location = new System.Drawing.Point(320, 3);
+            this.temperatureChart.Name = "temperatureChart";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Wheat;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.temperatureChart.Series.Add(series4);
+            this.temperatureChart.Size = new System.Drawing.Size(995, 629);
+            this.temperatureChart.TabIndex = 39;
+            this.temperatureChart.Text = "chart1";
             // 
             // SPVfractForm
             // 
@@ -355,6 +486,9 @@
             this.tabControl.ResumeLayout(false);
             this.SVPPage.ResumeLayout(false);
             this.SVPPage.PerformLayout();
+            this.TemprPage.ResumeLayout(false);
+            this.TemprPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.temperatureChart)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -385,6 +519,16 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage SVPPage;
         private System.Windows.Forms.TabPage TemprPage;
+        private System.Windows.Forms.TextBox minLagTextBox;
+        private System.Windows.Forms.TextBox nightCoefTextBox;
+        private System.Windows.Forms.TextBox maxLagTextBox;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox latTextBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.LinkLabel ReChartLabel;
+        private System.Windows.Forms.DataVisualization.Charting.Chart temperatureChart;
     }
 }
 
