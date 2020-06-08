@@ -7,10 +7,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Forms.VisualStyles;
+
 namespace SVPfract
 {
     public partial class SPVfractForm : Form
@@ -57,6 +60,88 @@ namespace SVPfract
                 temperature.Add(tempr);
             }
             return temperature;
+        }
+        private List<double> Optimise()
+        {
+            // For each day of the month, evaluate the calcTemperature function for a range of the three variables.
+            // compare the hourly temperatures with the observed and get a sum of the squares of the differences
+            // and select the minimum. store the day of the month and the values.
+
+            double latitude = Convert.ToDouble(latTextBox.Text);
+
+            // For every day in the month selected get the hourly temperature
+            int selectedMonth = fromMonth.SelectedIndex + 1;
+            var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
+
+            List<double> minLag = new List<double>() { 0.1, 0.2, 0.3, 0.5, 1.5, 2.0, 2.5, 3.0, 3.5 };
+            List<double> maxLag = new List<double>() { 2.0, 2.2, 2.3, 2.4, 2.6, 2.8, 3.0, 3.5, 4.0, 4.5, 5.0 };
+            List<double> nightCoef = new List<double>() { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+
+            List<double> estMinLags = new List<double>();
+            List<double> estMaxLags = new List<double>();
+            List<double> estNightCoefs = new List<double>();
+
+            double bestX = 0;
+            double bestY = 0;
+            double bestZ = 0;
+
+            for (int doy = dayData.First().doy; doy <= dayData.Last().doy; doy++)
+            {
+                var hourData = (from x in hourlyData.hourlyRecords where (x.doy == doy) select x.temperature).ToList();
+
+
+                double maxT = hourData.Max();
+                double minT = hourData.Min();
+
+                double minSSD = 999999;
+                bestX = 0;
+                bestY = 0;
+                bestZ = 0;
+
+                foreach (double x in minLag)
+                {
+                    foreach (double y in maxLag)
+                    {
+                        foreach (double z in nightCoef)
+                        {
+                            var estHourly = calcTemperature(latitude, doy, maxT, minT, x, y, z);
+                            // Estimated values are about solar noon which is 1PM. so move est one hour to right
+                            // Move first to flast to allow for solar noon DEBUG
+                            double lastVal = estHourly.Last(); estHourly.Insert(0, lastVal); estHourly.RemoveAt(estHourly.Count - 1);
+                            double ssd = CalcSSD(estHourly, hourData);
+                            if (ssd < minSSD)
+                            {
+                                minSSD = ssd;
+                                bestX = x; bestY = y; bestZ = z;
+                            }
+                        }
+                    }
+                }
+                estMinLags.Add(bestX);
+                estMaxLags.Add(bestY);
+                estNightCoefs.Add(bestZ);
+            }
+            // Now do stats on the estimations
+            Stats stats = new Stats();
+            List<double> parameters = new List<double>();
+            parameters.Add(estMinLags.Average());
+            parameters.Add(estMaxLags.Average());
+            parameters.Add(estNightCoefs.Average());
+            parameters.Add(stats.calcStDev(estMinLags.ToArray()));
+            parameters.Add(stats.calcStDev(estMaxLags.ToArray()));
+            parameters.Add(stats.calcStDev(estNightCoefs.ToArray()));
+            return parameters;
+        }
+        private double CalcSSD(List<double> estHourly, List<double> hourData)
+        {
+            double ssd = 0.0;
+            for (int i = 0; i < estHourly.Count; i++)
+            {
+                ssd += Math.Pow((estHourly[i] - hourData[i]), 2);
+            }
+
+
+            return ssd;
         }
 
     }

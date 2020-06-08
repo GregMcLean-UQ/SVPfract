@@ -46,11 +46,11 @@ namespace SVPfract
     }
     class DailyRecord       // daily maxT, minT, and avgVPD during daylight hours
     {
-        DateTime dateTime;
+        //DateTime dateTime;
         public double avgVPD;
         public double predVPD;
         public double svpMaxT, svpMinT;
-        private DateTime dt;
+        private readonly DateTime dt;
 
         public DailyRecord(DateTime dt, double avgVPD, double svpMaxT, double svpMinT)
         {
@@ -62,6 +62,12 @@ namespace SVPfract
         public void CalcPredVPD(Double spvFract)
         {
             predVPD = (svpMaxT - svpMinT) * spvFract;
+        }
+
+        public override string ToString()
+        {
+            string outPut = dt.ToString() + "," + avgVPD.ToString("F3") + "," + svpMaxT.ToString("F3") +"," + svpMinT.ToString("F3");
+            return outPut;
         }
     }
 

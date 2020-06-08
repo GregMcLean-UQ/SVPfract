@@ -27,6 +27,7 @@ namespace SVPfract
         }
         private void SPVfractForm_Load(object sender, EventArgs e)
         {
+            int[] squares = Enumerable.Range(2, 10).Select(x => x + 1).ToArray();
             for (int i = 1; i <= 12; i++)
             {
                 fromMonth.Items.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i));
@@ -93,13 +94,14 @@ namespace SVPfract
 
             double minSvpFract = 0; ;
             double minSSD = 50000.0;
-            for (double svpFract = 0.5; svpFract < 0.9; svpFract += 0.05)
+            for (double svpFract = 0.5; svpFract < 0.9; svpFract += 0.005)
             {
                 // calculate ssd
                 double sumSSD = 0;
                 foreach (DailyRecord rec in dailyData)
                 {
                     sumSSD += Math.Pow(((rec.svpMaxT - rec.svpMinT) * svpFract - rec.avgVPD), 2.0);
+                    
                 }
                 if (sumSSD < minSSD)
                 {
@@ -112,6 +114,7 @@ namespace SVPfract
             foreach (DailyRecord rec in dailyData)
             {
                 rec.CalcPredVPD(minSvpFract);
+                string s = rec.ToString();
             }
 
             // graph data 
@@ -238,6 +241,9 @@ namespace SVPfract
 
         private void ReChartLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+        }
+        private void GraphObserved()
+        { 
             // For every day in the month selected plot temperature
             int selectedMonth = fromMonth.SelectedIndex + 1;
             var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
@@ -258,33 +264,14 @@ namespace SVPfract
                 newDay.ToolTip = seriesName;
                 foreach (HourlyRecord hd in hourData)
                 {
-                    newDay.Points.AddXY(hd.dateTime.Hour - 1, hd.temperature);
+                    newDay.Points.AddXY(hd.dateTime.Hour, hd.temperature);
                 }
                 dailyMax.Add((from x in hourData select x.temperature).Max());
                 dailyMin.Add((from x in hourData select x.temperature).Min());
             }
 
 
-            // Add estimated temperatures for a day in the middle of the month with average monthly tMax and tMin
-            double latitude = Convert.ToDouble(latTextBox.Text);
-            double midMonth = dayData.First().doy + 15;
-
-            double tMax = dailyMax.Average();
-            double tMin = dailyMin.Average();
-            double minLag = Convert.ToDouble(minLagTextBox.Text);
-            double maxLag = Convert.ToDouble(maxLagTextBox.Text);
-            double nightCoef = Convert.ToDouble(nightCoefTextBox.Text);
-
-            var estHourly = calcTemperature(latitude, midMonth, tMax, tMin, minLag, maxLag, nightCoef);
-
-            Series pred = temperatureChart.Series.Add("Predicted");
-            pred.ChartType = SeriesChartType.Line;
-            pred.Color = Color.Black;
-            pred.ToolTip = "Predicted";
-            for (int i = 0; i < estHourly.Count; i++)
-            {
-                pred.Points.AddXY(i, estHourly[i]);
-            }
+            
 
         }
 
@@ -308,6 +295,55 @@ namespace SVPfract
                     includedMonths.Add(i);
                 for (int i = 1; i <= toMonth.SelectedIndex + 1; i++)
                     includedMonths.Add(i);
+            }
+        }
+
+        private void OptimiseLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string title = Path.GetFileNameWithoutExtension(MetFileNameLabel.Text) + " For " + fromMonth.Text;
+            temperatureChart.Titles[0].Text = title; ;
+            temperatureChart.Titles[1].Text = "Hourly Temperatures";
+            GraphObserved();
+
+            // Optimise the temperature estimation routine and then add the line to the graph
+            // Add estimated temperatures for a day in the middle of the month with average monthly tMax and tMin
+
+            List<double> parameters = Optimise();
+            minLaglabel.Text = parameters[0].ToString("F2");
+            maxLaglabel.Text = parameters[1].ToString("F2");
+            nightCoeflabel1.Text = parameters[2].ToString("F2");
+            minStdDevlabel.Text = parameters[3].ToString("F2");
+            labelmaxStdDev.Text = parameters[4].ToString("F2");
+            nightStdDevlabel.Text = parameters[5].ToString("F2");
+
+            double latitude = Convert.ToDouble(latTextBox.Text);
+
+            int selectedMonth = fromMonth.SelectedIndex + 1;
+            int midMonthDoy = new DateTime(2020, selectedMonth, 15).DayOfYear;
+
+            // get monthly average max and min
+            List<double> dailyMax = new List<double>();
+            List<double> dailyMin = new List<double>();
+
+            var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
+            for (int doy = dayData.First().doy; doy <= dayData.Last().doy; doy++)
+            {
+                var hourTemperature = from x in hourlyData.hourlyRecords where (x.doy == doy) select x.temperature;
+                dailyMax.Add(hourTemperature.Max());
+                dailyMin.Add(hourTemperature.Min());
+            }
+
+            var estHourly = calcTemperature(latitude, midMonthDoy, dailyMax.Average(), dailyMin.Average(), parameters[0], parameters[1], parameters[2]);
+            // Move first to flast to allow for solar noon DEBUG
+            //double lastVal = estHourly.Last(); estHourly.Insert(0, lastVal); estHourly.RemoveAt(estHourly.Count - 1);
+
+            Series pred = temperatureChart.Series.Add("Predicted");
+            pred.ChartType = SeriesChartType.Line;
+            pred.Color = Color.Black;
+            pred.ToolTip = "Predicted";
+            for (int i = 0; i < estHourly.Count; i++)
+            {
+                pred.Points.AddXY(i, estHourly[i]);
             }
         }
     }
