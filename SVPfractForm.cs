@@ -40,7 +40,7 @@ namespace SVPfract
         private void MetFileLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             // Get the met file data
-            MetFileNameLabel.Text = @"C:\Pioneer\SPVfract\WoodlandHourly2019.csv";
+            MetFileNameLabel.Text = @"C:\Pioneer\SPVfract\VilucoHourly2018_19.csv";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
             MetFileNameLabel.Text = openFileDialog.FileName;
             ReadMetData();
@@ -85,7 +85,7 @@ namespace SVPfract
 
                     dailyData.Add(new DailyRecord(dt, avgVPD, svpMaxT, svpMinT));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
@@ -101,7 +101,7 @@ namespace SVPfract
                 foreach (DailyRecord rec in dailyData)
                 {
                     sumSSD += Math.Pow(((rec.svpMaxT - rec.svpMinT) * svpFract - rec.avgVPD), 2.0);
-                    
+
                 }
                 if (sumSSD < minSSD)
                 {
@@ -141,7 +141,7 @@ namespace SVPfract
             double slope, intercept, rsq, rmse;
             s.calcRegression(obsVPD.ToArray(), predVPD.ToArray(), out slope, out intercept, out rsq, out rmse);
             chart.Series[1].Points.Clear();
-            chart.Series[1].Points.AddXY(0, 0);
+            chart.Series[1].Points.AddXY(0, intercept);
             double maxVal = obsVPD.Max();
             chart.Series[1].Points.AddXY(maxVal, maxVal * slope + intercept);
             TextAnnotation ta = new TextAnnotation();
@@ -243,7 +243,7 @@ namespace SVPfract
         {
         }
         private void GraphObserved()
-        { 
+        {
             // For every day in the month selected plot temperature
             int selectedMonth = fromMonth.SelectedIndex + 1;
             var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
@@ -271,7 +271,7 @@ namespace SVPfract
             }
 
 
-            
+
 
         }
 
@@ -345,6 +345,75 @@ namespace SVPfract
             {
                 pred.Points.AddXY(i, estHourly[i]);
             }
+        }
+
+        private void DailyLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            GraphDaily();
+        }
+
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            // Incremant Day of the Month
+            int value = Convert.ToInt32(domTextBox.Text);
+            if (++value > 31) return;
+            domTextBox.Text = value.ToString();
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            // Decrement Day of the Month
+            int value = Convert.ToInt32(domTextBox.Text);
+            if (--value < 1) return;
+            domTextBox.Text = value.ToString();
+        }
+
+        private void domTextBox_TextChanged(object sender, EventArgs e)
+        {
+            GraphDaily();
+        }
+        private void GraphDaily()
+        { 
+            // Graph Observed and Predicted for this dom
+            // Look at selected day
+            int day = Convert.ToInt32(domTextBox.Text);
+            double minParam = Convert.ToDouble(minLaglabel.Text);
+            double maxParam = Convert.ToDouble(maxLaglabel.Text);
+            double nightParam = Convert.ToDouble(nightCoeflabel1.Text);
+            double latitude = Convert.ToDouble(latTextBox.Text);
+
+            int selectedMonth = fromMonth.SelectedIndex + 1;
+            var dayData = from x in hourlyData.hourlyRecords where (x.dateTime.Month == selectedMonth) select x;
+
+            temperatureChart.Series.Clear();
+
+            int doy = dayData.First().doy + day - 1;
+            temperatureChart.Series.Clear();
+            var hourData = (from x in hourlyData.hourlyRecords where (x.doy == doy) select x).ToList();
+
+            // For each day draw a line of temperature vs hour of day
+            string seriesName = "Year" + hourData.First().dateTime.Year.ToString() + "Day" + doy.ToString();
+            Series newDay = temperatureChart.Series.Add(seriesName);
+            newDay.ChartType = SeriesChartType.Point;
+            newDay.Color = Color.Blue;
+            newDay.ToolTip = seriesName;
+
+            // Predicted Values
+            double dailyMax = (from x in hourData select x.temperature).Max();
+            double dailyMin = (from x in hourData select x.temperature).Min();
+            var estHourly = calcTemperature(latitude, doy, dailyMax, dailyMin, minParam, maxParam, nightParam);
+            // Noon solar is 1:00PM local so increase hourly by 1 hour.
+            estHourly.Insert(0, estHourly.Last());estHourly.RemoveAt(estHourly.Count - 1);
+            Series predicted = temperatureChart.Series.Add("Predicted");
+            predicted.ChartType = SeriesChartType.Line;
+            predicted.Color = Color.Black;
+            predicted.ToolTip = seriesName;
+            for (int i = 0; i < 24; i++)
+            {
+                predicted.Points.AddXY(i, estHourly[i]);
+                newDay.Points.AddXY(i, hourData[i].temperature);
+            }
+
         }
     }
 }

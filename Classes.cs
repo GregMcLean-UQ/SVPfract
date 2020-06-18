@@ -16,6 +16,7 @@ namespace SVPfract
             hourlyRecords = new List<HourlyRecord>();
         }
     }
+    
     class HourlyRecord      // hourly data from file
     {
         double RH;

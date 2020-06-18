@@ -88,6 +88,9 @@ namespace SVPfract
             for (int doy = dayData.First().doy; doy <= dayData.Last().doy; doy++)
             {
                 var hourData = (from x in hourlyData.hourlyRecords where (x.doy == doy) select x.temperature).ToList();
+                //Convert to solar time. Move back 1 hour.
+                hourData.Add(hourData.First());hourData.RemoveAt(0);
+
 
 
                 double maxT = hourData.Max();
@@ -107,7 +110,7 @@ namespace SVPfract
                             var estHourly = calcTemperature(latitude, doy, maxT, minT, x, y, z);
                             // Estimated values are about solar noon which is 1PM. so move est one hour to right
                             // Move first to flast to allow for solar noon DEBUG
-                            double lastVal = estHourly.Last(); estHourly.Insert(0, lastVal); estHourly.RemoveAt(estHourly.Count - 1);
+                           // double lastVal = estHourly.Last(); estHourly.Insert(0, lastVal); estHourly.RemoveAt(estHourly.Count - 1);
                             double ssd = CalcSSD(estHourly, hourData);
                             if (ssd < minSSD)
                             {

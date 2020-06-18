@@ -69,21 +69,26 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.SVPPage = new System.Windows.Forms.TabPage();
             this.TemprPage = new System.Windows.Forms.TabPage();
+            this.DownButton = new System.Windows.Forms.Button();
+            this.UpButton = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.domTextBox = new System.Windows.Forms.TextBox();
+            this.DailyLabel = new System.Windows.Forms.LinkLabel();
+            this.nightStdDevlabel = new System.Windows.Forms.Label();
+            this.labelmaxStdDev = new System.Windows.Forms.Label();
+            this.minStdDevlabel = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.maxLaglabel = new System.Windows.Forms.Label();
+            this.nightCoeflabel1 = new System.Windows.Forms.Label();
+            this.minLaglabel = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.OptimiseLabel = new System.Windows.Forms.LinkLabel();
             this.temperatureChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.latTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.OptimiseLabel = new System.Windows.Forms.LinkLabel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.minLaglabel = new System.Windows.Forms.Label();
-            this.nightCoeflabel1 = new System.Windows.Forms.Label();
-            this.maxLaglabel = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.minStdDevlabel = new System.Windows.Forms.Label();
-            this.labelmaxStdDev = new System.Windows.Forms.Label();
-            this.nightStdDevlabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.graphMenu.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -230,40 +235,40 @@
             this.printToolStripMenuItem,
             this.exportDataToolStripMenuItem1});
             this.graphMenu.Name = "graphMenu";
-            this.graphMenu.Size = new System.Drawing.Size(181, 136);
+            this.graphMenu.Size = new System.Drawing.Size(172, 114);
             // 
             // copyItem
             // 
             this.copyItem.Name = "copyItem";
-            this.copyItem.Size = new System.Drawing.Size(180, 22);
+            this.copyItem.Size = new System.Drawing.Size(171, 22);
             this.copyItem.Text = "Copy to Clipboard";
             this.copyItem.Click += new System.EventHandler(this.copyItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // printPreviewToolStripMenuItem
             // 
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.printPreviewToolStripMenuItem.Text = "Print Preview";
             this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
             // 
             // printToolStripMenuItem
             // 
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
             // 
             // exportDataToolStripMenuItem1
             // 
             this.exportDataToolStripMenuItem1.Name = "exportDataToolStripMenuItem1";
-            this.exportDataToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.exportDataToolStripMenuItem1.Size = new System.Drawing.Size(171, 22);
             this.exportDataToolStripMenuItem1.Text = "Export Data";
             this.exportDataToolStripMenuItem1.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
             // 
@@ -351,6 +356,11 @@
             // 
             // TemprPage
             // 
+            this.TemprPage.Controls.Add(this.DownButton);
+            this.TemprPage.Controls.Add(this.UpButton);
+            this.TemprPage.Controls.Add(this.label11);
+            this.TemprPage.Controls.Add(this.domTextBox);
+            this.TemprPage.Controls.Add(this.DailyLabel);
             this.TemprPage.Controls.Add(this.nightStdDevlabel);
             this.TemprPage.Controls.Add(this.labelmaxStdDev);
             this.TemprPage.Controls.Add(this.minStdDevlabel);
@@ -373,6 +383,166 @@
             this.TemprPage.TabIndex = 1;
             this.TemprPage.Text = "Diurnal Temperature";
             this.TemprPage.UseVisualStyleBackColor = true;
+            // 
+            // DownButton
+            // 
+            this.DownButton.Location = new System.Drawing.Point(23, 374);
+            this.DownButton.Name = "DownButton";
+            this.DownButton.Size = new System.Drawing.Size(51, 23);
+            this.DownButton.TabIndex = 56;
+            this.DownButton.Text = "Down";
+            this.DownButton.UseVisualStyleBackColor = true;
+            this.DownButton.Click += new System.EventHandler(this.DownButton_Click);
+            // 
+            // UpButton
+            // 
+            this.UpButton.Location = new System.Drawing.Point(140, 374);
+            this.UpButton.Name = "UpButton";
+            this.UpButton.Size = new System.Drawing.Size(51, 23);
+            this.UpButton.TabIndex = 55;
+            this.UpButton.Text = "UP";
+            this.UpButton.UseVisualStyleBackColor = true;
+            this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(67, 347);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(107, 16);
+            this.label11.TabIndex = 54;
+            this.label11.Text = "Day of the Month";
+            // 
+            // domTextBox
+            // 
+            this.domTextBox.Location = new System.Drawing.Point(92, 375);
+            this.domTextBox.Name = "domTextBox";
+            this.domTextBox.Size = new System.Drawing.Size(30, 22);
+            this.domTextBox.TabIndex = 53;
+            this.domTextBox.Text = "1";
+            this.domTextBox.TextChanged += new System.EventHandler(this.domTextBox_TextChanged);
+            // 
+            // DailyLabel
+            // 
+            this.DailyLabel.AutoSize = true;
+            this.DailyLabel.Location = new System.Drawing.Point(20, 319);
+            this.DailyLabel.Name = "DailyLabel";
+            this.DailyLabel.Size = new System.Drawing.Size(69, 16);
+            this.DailyLabel.TabIndex = 52;
+            this.DailyLabel.TabStop = true;
+            this.DailyLabel.Text = "View Daily";
+            this.DailyLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.DailyLabel_LinkClicked);
+            // 
+            // nightStdDevlabel
+            // 
+            this.nightStdDevlabel.AutoSize = true;
+            this.nightStdDevlabel.Location = new System.Drawing.Point(333, 256);
+            this.nightStdDevlabel.Name = "nightStdDevlabel";
+            this.nightStdDevlabel.Size = new System.Drawing.Size(36, 16);
+            this.nightStdDevlabel.TabIndex = 51;
+            this.nightStdDevlabel.Text = "night";
+            // 
+            // labelmaxStdDev
+            // 
+            this.labelmaxStdDev.AutoSize = true;
+            this.labelmaxStdDev.Location = new System.Drawing.Point(333, 229);
+            this.labelmaxStdDev.Name = "labelmaxStdDev";
+            this.labelmaxStdDev.Size = new System.Drawing.Size(33, 16);
+            this.labelmaxStdDev.TabIndex = 50;
+            this.labelmaxStdDev.Text = "max";
+            // 
+            // minStdDevlabel
+            // 
+            this.minStdDevlabel.AutoSize = true;
+            this.minStdDevlabel.Location = new System.Drawing.Point(333, 201);
+            this.minStdDevlabel.Name = "minStdDevlabel";
+            this.minStdDevlabel.Size = new System.Drawing.Size(29, 16);
+            this.minStdDevlabel.TabIndex = 49;
+            this.minStdDevlabel.Text = "min";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(333, 167);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 16);
+            this.label10.TabIndex = 48;
+            this.label10.Text = "StdDev";
+            // 
+            // maxLaglabel
+            // 
+            this.maxLaglabel.AutoSize = true;
+            this.maxLaglabel.Location = new System.Drawing.Point(273, 229);
+            this.maxLaglabel.Name = "maxLaglabel";
+            this.maxLaglabel.Size = new System.Drawing.Size(33, 16);
+            this.maxLaglabel.TabIndex = 47;
+            this.maxLaglabel.Text = "max";
+            // 
+            // nightCoeflabel1
+            // 
+            this.nightCoeflabel1.AutoSize = true;
+            this.nightCoeflabel1.Location = new System.Drawing.Point(273, 256);
+            this.nightCoeflabel1.Name = "nightCoeflabel1";
+            this.nightCoeflabel1.Size = new System.Drawing.Size(36, 16);
+            this.nightCoeflabel1.TabIndex = 46;
+            this.nightCoeflabel1.Text = "night";
+            // 
+            // minLaglabel
+            // 
+            this.minLaglabel.AutoSize = true;
+            this.minLaglabel.Location = new System.Drawing.Point(273, 201);
+            this.minLaglabel.Name = "minLaglabel";
+            this.minLaglabel.Size = new System.Drawing.Size(29, 16);
+            this.minLaglabel.TabIndex = 45;
+            this.minLaglabel.Text = "min";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(20, 256);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(247, 16);
+            this.label9.TabIndex = 44;
+            this.label9.Text = "Coef for night time temperature decrease:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 229);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(215, 16);
+            this.label8.TabIndex = 43;
+            this.label8.Text = "Max temperature after noon lag (hr):";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(19, 201);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(225, 16);
+            this.label7.TabIndex = 42;
+            this.label7.Text = "Min temperature after sunrise lag (hr):";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(20, 167);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(118, 16);
+            this.label5.TabIndex = 41;
+            this.label5.Text = "Optimised Values";
+            // 
+            // OptimiseLabel
+            // 
+            this.OptimiseLabel.AutoSize = true;
+            this.OptimiseLabel.Location = new System.Drawing.Point(20, 92);
+            this.OptimiseLabel.Name = "OptimiseLabel";
+            this.OptimiseLabel.Size = new System.Drawing.Size(133, 16);
+            this.OptimiseLabel.TabIndex = 40;
+            this.OptimiseLabel.TabStop = true;
+            this.OptimiseLabel.Text = "Calculate Parameters";
+            this.OptimiseLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OptimiseLabel_LinkClicked);
             // 
             // temperatureChart
             // 
@@ -411,7 +581,7 @@
             this.latTextBox.Name = "latTextBox";
             this.latTextBox.Size = new System.Drawing.Size(76, 22);
             this.latTextBox.TabIndex = 24;
-            this.latTextBox.Text = "38.6785";
+            this.latTextBox.Text = "-33.775";
             // 
             // label6
             // 
@@ -421,117 +591,6 @@
             this.label6.Size = new System.Drawing.Size(71, 16);
             this.label6.TabIndex = 23;
             this.label6.Text = "Latitude (°)";
-            // 
-            // OptimiseLabel
-            // 
-            this.OptimiseLabel.AutoSize = true;
-            this.OptimiseLabel.Location = new System.Drawing.Point(20, 92);
-            this.OptimiseLabel.Name = "OptimiseLabel";
-            this.OptimiseLabel.Size = new System.Drawing.Size(133, 16);
-            this.OptimiseLabel.TabIndex = 40;
-            this.OptimiseLabel.TabStop = true;
-            this.OptimiseLabel.Text = "Calculate Parameters";
-            this.OptimiseLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OptimiseLabel_LinkClicked);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(20, 167);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(118, 16);
-            this.label5.TabIndex = 41;
-            this.label5.Text = "Optimised Values";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(19, 201);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(225, 16);
-            this.label7.TabIndex = 42;
-            this.label7.Text = "Min temperature after sunrise lag (hr):";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(20, 229);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(215, 16);
-            this.label8.TabIndex = 43;
-            this.label8.Text = "Max temperature after noon lag (hr):";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(20, 256);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(247, 16);
-            this.label9.TabIndex = 44;
-            this.label9.Text = "Coef for night time temperature decrease:";
-            // 
-            // minLaglabel
-            // 
-            this.minLaglabel.AutoSize = true;
-            this.minLaglabel.Location = new System.Drawing.Point(273, 201);
-            this.minLaglabel.Name = "minLaglabel";
-            this.minLaglabel.Size = new System.Drawing.Size(29, 16);
-            this.minLaglabel.TabIndex = 45;
-            this.minLaglabel.Text = "min";
-            // 
-            // nightCoeflabel1
-            // 
-            this.nightCoeflabel1.AutoSize = true;
-            this.nightCoeflabel1.Location = new System.Drawing.Point(273, 256);
-            this.nightCoeflabel1.Name = "nightCoeflabel1";
-            this.nightCoeflabel1.Size = new System.Drawing.Size(36, 16);
-            this.nightCoeflabel1.TabIndex = 46;
-            this.nightCoeflabel1.Text = "night";
-            // 
-            // maxLaglabel
-            // 
-            this.maxLaglabel.AutoSize = true;
-            this.maxLaglabel.Location = new System.Drawing.Point(273, 229);
-            this.maxLaglabel.Name = "maxLaglabel";
-            this.maxLaglabel.Size = new System.Drawing.Size(33, 16);
-            this.maxLaglabel.TabIndex = 47;
-            this.maxLaglabel.Text = "max";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(333, 167);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(49, 16);
-            this.label10.TabIndex = 48;
-            this.label10.Text = "StdDev";
-            // 
-            // minStdDevlabel
-            // 
-            this.minStdDevlabel.AutoSize = true;
-            this.minStdDevlabel.Location = new System.Drawing.Point(333, 201);
-            this.minStdDevlabel.Name = "minStdDevlabel";
-            this.minStdDevlabel.Size = new System.Drawing.Size(29, 16);
-            this.minStdDevlabel.TabIndex = 49;
-            this.minStdDevlabel.Text = "min";
-            // 
-            // labelmaxStdDev
-            // 
-            this.labelmaxStdDev.AutoSize = true;
-            this.labelmaxStdDev.Location = new System.Drawing.Point(333, 229);
-            this.labelmaxStdDev.Name = "labelmaxStdDev";
-            this.labelmaxStdDev.Size = new System.Drawing.Size(33, 16);
-            this.labelmaxStdDev.TabIndex = 50;
-            this.labelmaxStdDev.Text = "max";
-            // 
-            // nightStdDevlabel
-            // 
-            this.nightStdDevlabel.AutoSize = true;
-            this.nightStdDevlabel.Location = new System.Drawing.Point(333, 256);
-            this.nightStdDevlabel.Name = "nightStdDevlabel";
-            this.nightStdDevlabel.Size = new System.Drawing.Size(36, 16);
-            this.nightStdDevlabel.TabIndex = 51;
-            this.nightStdDevlabel.Text = "night";
             // 
             // SPVfractForm
             // 
@@ -601,6 +660,11 @@
         private System.Windows.Forms.Label labelmaxStdDev;
         private System.Windows.Forms.Label minStdDevlabel;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.LinkLabel DailyLabel;
+        private System.Windows.Forms.Button DownButton;
+        private System.Windows.Forms.Button UpButton;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox domTextBox;
     }
 }
 
